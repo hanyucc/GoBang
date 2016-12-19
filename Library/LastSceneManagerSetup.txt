@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/GoBang.unity
+  isLoaded: 1
+  isActive: 1
