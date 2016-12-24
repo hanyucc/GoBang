@@ -6,7 +6,7 @@ using System;
 public class AI {
 
     int INF = 2147483647, smax = 6, max_depth = 3;
-    double deeper = 0.6;
+    double deeper = 0.8;
     int[] score1 = { 7, 35, 800, 15000, 800000 }, score2 = { 7, 15, 400, 1800, 100000 };
 
     public List<MainLoop.point> count_point(int k) // score of single point
@@ -128,7 +128,8 @@ public class AI {
     public int player(int d, int x, int y)
     {
         List<MainLoop.point> vp = new List<MainLoop.point>();
-        int i, best = -INF, v, t = BoardModel.check_win();
+        List<int> choice = new List<int>();
+        int i, v, tot = 0, t = BoardModel.check_win();
         MainLoop.point tmp = new MainLoop.point();
         if (d == 0 || t != 0)
         {
@@ -158,14 +159,16 @@ public class AI {
         {
             tmp = vp[i];
             BoardModel.map[tmp.x, tmp.y] = 1;
-            v = tmp.v - Convert.ToInt32(ai(d - 1, tmp.x, tmp.y) * deeper);
-            if (v > best)
-            {
-                best = v;
-            }
+            v = tmp.v - Convert.ToInt32(ai(d - 1, tmp.x, tmp.y));
+            choice.Add(v);
             BoardModel.map[tmp.x, tmp.y] = 0;
         }
-        return best;
+        choice.Sort((a, b) => -a.CompareTo(b));
+        for (i = 0; i < (choice.Count < 3 ? choice.Count : 3); i++)
+        {
+            tot += choice[i];
+        }
+        return Convert.ToInt32(tot / (choice.Count < 3 ? choice.Count : 3));
     }
 
 
