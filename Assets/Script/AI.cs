@@ -6,21 +6,23 @@ using System;
 public class AI {
 
     int INF = 2147483647, smax = 6, max_depth = 3;
-    double deeper = 0.8;
-    int[] score1 = { 7, 35, 800, 15000, 800000 }, score2 = { 7, 15, 400, 1800, 100000 };
+    double deeper = 0.75; // deeper searches are less important
+    int[] score1 = { 7, 35, 800, 15000, 800000 }, score2 = { 7, 15, 400, 2500, 100000 };
+    // score1: score of own pieces { 0, 1, 2, 3, 4 } in a row
+    // score2: score of opponent's pieces { 0, 1, 2, 3, 4 } in a row
 
-    public List<MainLoop.point> count_point(int k) // score of single point
+    public List<MainLoop.point> count_point(int k) // rank of each point on current board
     {
         List<MainLoop.point> vp = new List<MainLoop.point>();
         MainLoop.point tmp = new MainLoop.point();
         int i, j, x, y, cnt1, cnt2;
         int[,] rank = new int[Board.count, Board.count];
-        int[,] mv = { { 1, 1, 0, -1 }, { 0, 1, 1, 1 } };
+        int[,] mv = { { 1, 1, 0, -1 }, { 0, 1, 1, 1 } }; // move in 4 directions
         for (x = 0; x < 15; x++)
 	    {
 		    for (y = 0; y < 15; y++)
 		    {
-			    for (i = 0; i< 4; i++)
+			    for (i = 0; i < 4; i++)
 			    {
 				    cnt1 = 0;
 				    cnt2 = 0;
@@ -28,7 +30,7 @@ public class AI {
 				    {
 					    continue;
 				    }
-				    for (j = 0; j< 5; j++)
+				    for (j = 0; j < 5; j++)
 				    {
 					    if (BoardModel.map[x + j * mv[0, i], y + j * mv[1, i]] == k)
 					    {
@@ -41,7 +43,7 @@ public class AI {
 				    }
 				    if (cnt1 == 0 && cnt2 != 0)
 				    {
-					    for (j = 0; j< 5; j++)
+					    for (j = 0; j < 5; j++)
 					    {
 						    rank[x + j * mv[0, i], y + j * mv[1, i]] += score2[cnt2];
 					    }
@@ -55,7 +57,7 @@ public class AI {
 				    }
 				    else if (cnt1 == 0 && cnt2 == 0)
 				    {
-					    for (j = 0; j< 5; j++)
+					    for (j = 0; j < 5; j++)
 					    {
 						    rank[x + j * mv[0, i], y + j * mv[1, i]] += score1[0];
 					    }
@@ -81,7 +83,7 @@ public class AI {
     }
 
 
-    public int ai(int d, int x, int y)
+    public int ai(int d, int x, int y) // calculate AI's score
     {
         List<MainLoop.point> vp = new List<MainLoop.point>();
         int i, best = -INF, v, t = BoardModel.check_win();
@@ -121,11 +123,11 @@ public class AI {
             }
             BoardModel.map[tmp.x, tmp.y] = 0;
         }
-        return best;
+        return best; // best score
     }
 
 
-    public int player(int d, int x, int y)
+    public int player(int d, int x, int y) // calculate player's score
     {
         List<MainLoop.point> vp = new List<MainLoop.point>();
         List<int> choice = new List<int>();
@@ -164,11 +166,11 @@ public class AI {
             BoardModel.map[tmp.x, tmp.y] = 0;
         }
         choice.Sort((a, b) => -a.CompareTo(b));
-        for (i = 0; i < (choice.Count < 3 ? choice.Count : 3); i++)
+        for (i = 0; i < (choice.Count < 4 ? choice.Count : 4); i++)
         {
             tot += choice[i];
         }
-        return Convert.ToInt32(tot / (choice.Count < 3 ? choice.Count : 3));
+        return Convert.ToInt32(tot / (choice.Count < 4 ? choice.Count : 4) + 1); // average score
     }
 
 
@@ -197,11 +199,17 @@ public class AI {
                 return 1;
             }
         });
+        if (vp[0].v >= 100000)
+        {
+            bestp.x = vp[0].x;
+            bestp.y = vp[0].y;
+            return bestp;
+        }
         for (i = 0; i < (smax < vp.Count ? smax : vp.Count); i++)
         {
             tmp = vp[i];
             BoardModel.map[tmp.x, tmp.y] = 2;
-            v = tmp.v - Convert.ToInt32(player(max_depth, tmp.x, tmp.y) * deeper); // determine depth
+            v = tmp.v - Convert.ToInt32(player(max_depth, tmp.x, tmp.y) * deeper);
             if (v > best)
             {
                 best = v;
@@ -212,15 +220,4 @@ public class AI {
         }
         return bestp;
     }
-    /*
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-    */
 }

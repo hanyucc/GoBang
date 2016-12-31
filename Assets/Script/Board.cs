@@ -5,11 +5,11 @@ using UnityEngine;
 public class Board : MonoBehaviour {
 
     public GameObject cross_prefab;
-    const float cross_size = 35;
-    public const int count = 15, board_size = 490, half_size = 245;
+    const float cross_size = 46; // size of crosses
+    public const int count = 15, place = 323; // number and initial position of crosses
     Dictionary<int, Cross> cross_map = new Dictionary<int, Cross>();
 
-    static int MakeKey(int x, int y)
+    static int MakeKey(int x, int y) // hash
     {
         return x * 10000 + y;
     }
@@ -25,7 +25,7 @@ public class Board : MonoBehaviour {
         cross_map.Clear();
 
         int x, y;
-        for (x = 0; x < count; x++)
+        for (x = 0; x < count; x++) // init all crosses
         {
             for (y = 0; y < count; y++)
             {
@@ -34,8 +34,8 @@ public class Board : MonoBehaviour {
                 cross_object.transform.localScale = Vector3.one;
 
                 var pos = cross_object.transform.localPosition;
-                pos.x = -half_size + x * cross_size;
-                pos.y = -half_size + y * cross_size;
+                pos.x = -place + x * cross_size;
+                pos.y = -place + y * cross_size;
                 pos.z = 1;
                 cross_object.transform.localPosition = pos;
 
@@ -63,11 +63,5 @@ public class Board : MonoBehaviour {
 	void Start () {
         Reset();
 	}
-	
-    /*
-	// Update is called once per frame
-	void Update () {
-		
-	}
-    */
+
 }

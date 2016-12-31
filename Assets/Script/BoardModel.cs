@@ -7,7 +7,7 @@ public class BoardModel : MonoBehaviour {
     public static int[,] map = new int[Board.count, Board.count];
     public static int[,] mv = { { 1, 1, 0, -1 }, { 0, 1, 1, 1 } };
 
-    public static int get_type(int x, int y)
+    public static int get_type(int x, int y) // get value of a piece
     {
         if (x < 0 || x >= Board.count)
         {
@@ -20,7 +20,7 @@ public class BoardModel : MonoBehaviour {
         return map[x, y];
     }
 
-    public static bool set_type(int x, int y, int k)
+    public static bool set_type(int x, int y, int k) // place a piece
     {
         if (x < 0 || x >= Board.count)
         {

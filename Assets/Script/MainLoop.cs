@@ -42,7 +42,7 @@ public class MainLoop : MonoBehaviour {
         board.Reset();
     }
 
-    public void on_click(Cross cross)
+    public void on_click(Cross cross) // player's turn
     {
         if (state != 1)
         {
@@ -53,9 +53,9 @@ public class MainLoop : MonoBehaviour {
         tmp.y = cross.grid_y;
         if (check_point(tmp))
         {
-            if (place_chess(cross, true) == 1)
+            if (place_chess(cross, true) == 1) // player wins
             {
-                state = 0;
+                state = 3;
             }
             else
             {
@@ -80,9 +80,9 @@ public class MainLoop : MonoBehaviour {
                     point tmp = new point();
                     tmp = ai.select_point();
 
-                    if (place_chess(board.GetCross(tmp.x, tmp.y), false) == 2)
+                    if (place_chess(board.GetCross(tmp.x, tmp.y), false) == 2) // AI wins
                     {
-                        state = 0;
+                        state = 4;
                     }
                     else
                     {
