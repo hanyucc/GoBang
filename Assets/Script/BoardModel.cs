@@ -6,6 +6,7 @@ public class BoardModel : MonoBehaviour {
 
     public static int[,] map = new int[Board.count, Board.count];
     public static int[,] mv = { { 1, 1, 0, -1 }, { 0, 1, 1, 1 } };
+    public static int win_cnt = 0, lose_cnt = 0;
 
     public static int get_type(int x, int y) // get value of a piece
     {

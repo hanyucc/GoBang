@@ -14,6 +14,7 @@ public class MainLoop : MonoBehaviour {
     public GameObject white_prefab;
     public GameObject black_prefab;
     int state;
+    bool flag = false;
     Board board;
     AI ai;
 
@@ -63,15 +64,15 @@ public class MainLoop : MonoBehaviour {
             }
         }
     }
-
-    // Use this for initialization
-    void Start () {
+    
+    void Start ()
+    {
         board = GetComponent<Board>();
         Restart();
     }
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 
         switch (state)
         {
@@ -88,8 +89,35 @@ public class MainLoop : MonoBehaviour {
                     {
                         state = 1;
                     }
+                    break;
                 }
-                break;
+            case 3:
+                {
+                    if (!flag)
+                    {
+                        BoardModel.win_cnt++;
+                        Text result_text = GameObject.Find("Canvas/Result").GetComponent<Text>();
+                        result_text.text = "Congratulations! You won the game!";
+                        flag = true;
+                    }
+                    break;
+                }
+            case 4:
+                {
+                    if (!flag)
+                    {
+                        BoardModel.lose_cnt++;
+                        Text result_text = GameObject.Find("Canvas/Result").GetComponent<Text>();
+                        result_text.text = "Too bad. You lost the game......";
+                        flag = true;
+                    }
+                    break;
+                }
         }
+
+        Text win_text = GameObject.Find("Canvas/WinCount").GetComponent<Text>();
+        win_text.text = Convert.ToString(BoardModel.win_cnt);
+        Text lose_text = GameObject.Find("Canvas/LoseCount").GetComponent<Text>();
+        lose_text.text = Convert.ToString(BoardModel.lose_cnt);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
@@ -14,7 +15,7 @@ public class Board : MonoBehaviour {
         return x * 10000 + y;
     }
 
-    public void Reset()
+    public void Reset() // reset the board
     {
         foreach (Transform child in gameObject.transform)
         {
@@ -23,6 +24,7 @@ public class Board : MonoBehaviour {
 
         var mainLoop = GetComponent<MainLoop>();
         cross_map.Clear();
+        BoardModel.map = new int[Board.count, Board.count];
 
         int x, y;
         for (x = 0; x < count; x++) // init all crosses
@@ -47,6 +49,9 @@ public class Board : MonoBehaviour {
                 cross_map.Add(MakeKey(x, y), cross);
             }
         }
+
+        Text result_text = GameObject.Find("Result").GetComponent<Text>();
+        result_text.text = "";
     }
 
     public Cross GetCross(int x, int y)
@@ -58,9 +63,9 @@ public class Board : MonoBehaviour {
         }
         return null;
     }
-
-	// Use this for initialization
-	void Start () {
+    
+	void Start ()
+    {
         Reset();
 	}
 
