@@ -39,6 +39,7 @@ public class MainLoop : MonoBehaviour {
     public void Restart()
     {
         state = 1;
+        flag = false;
         ai = new AI();
         board.Reset();
     }
